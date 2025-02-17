@@ -8,8 +8,12 @@ import {MasonryFlashList} from '@shopify/flash-list';
 import Animated, {FadeInDown} from 'react-native-reanimated';
 import Loading from './Loading';
 import {CachedImage} from '../Helpers/Image';
+import { useNavigation } from '@react-navigation/native';
 
 const Recipes = ({categories, meals}: {categories: any[]; meals: any}) => {
+
+  const navigation = useNavigation();
+
   return (
     <View className="mx-4 space-y-3">
       <Text
@@ -27,7 +31,7 @@ const Recipes = ({categories, meals}: {categories: any[]; meals: any}) => {
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
             renderItem={({item, index}) => (
-              <RenderItem item={item} index={index} />
+              <RenderItem item={item} index={index} navigation={navigation} />
             )}
             onEndReachedThreshold={0.1}
           />
@@ -37,7 +41,7 @@ const Recipes = ({categories, meals}: {categories: any[]; meals: any}) => {
   );
 };
 
-const RenderItem = ({item, index}: any) => {
+const RenderItem = ({item, index, navigation}: any) => {
   const isEven = index % 2 === 0;
   return (
     <Animated.View
@@ -51,9 +55,13 @@ const RenderItem = ({item, index}: any) => {
           paddingLeft: isEven ? 0 : 8,
           paddingRight: isEven ? 8 : 0,
         }}
+        onPress={() => {
+          navigation.navigate('RecipeDetail', {...item});
+        }}
         className="flex justify-center mb-4 space-y-1">
         <CachedImage
           uri={item.strMealThumb}
+          sharedTransitionTag={item.strMeal}
           style={{
             width: '100%',
             height: index % 3 === 0 ? hp(25) : hp(35),

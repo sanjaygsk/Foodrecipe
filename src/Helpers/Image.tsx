@@ -34,5 +34,7 @@ export const CachedImage = (props: any) => {
     fetchImage();
   }, []);
 
-  return <Animated.Image source={cachedSource} {...props} />;
+  console.info('cachedSource', props.sharedTransitionTag);
+
+  return <Animated.Image source={cachedSource} sharedTransitionTag={props.sharedTransitionTag} {...props} />;
 };
